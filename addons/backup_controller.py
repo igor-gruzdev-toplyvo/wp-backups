@@ -5,7 +5,7 @@ from datetime import datetime
 class Backup:
     def __init__(self):
         self.env = environ.Env()
-        self.backups_path = "/home/toplyvosite/Project/toplyvo_landing_backups"
+        self.backups_path = self.env("WP_BACKUPS")
         self.current_date = datetime.today().strftime("%Y-%m-%d")
         self.dump_path = None
         self.mod_date_array = {}
