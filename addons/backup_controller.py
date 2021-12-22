@@ -13,9 +13,7 @@ class Backup:
 
     def __src_generator(self):
         """Method generates src path's for furher operations"""
-        wp_prefix = (
-            "/home/toplyvosite/Project/new_wordpress_core_prod/wordpress/wp-content"
-        )
+        wp_prefix = self.env("WP_PREFIX")
 
         self.dump_path = f"{wp_prefix}/{self.current_date}-bc.sql"
 
