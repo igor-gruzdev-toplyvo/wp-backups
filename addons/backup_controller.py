@@ -76,8 +76,8 @@ class Backup:
         except Exception:
             pass
 
-        for key, value in self.source_paths:
+        for element in self.source_paths:
             system(
                 f"tar -xvzf {last_modified_element}/\
-                    {value}-{self.current_date}.tar.gz {key}"
+                    {self.source_paths[element]}-{self.current_date}.tar.gz {element}"
             )
