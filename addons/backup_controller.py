@@ -50,7 +50,7 @@ class Backup:
         dump for further operations
         """
         user = environ.get("DB_USER")
-        password = environ.get("DB_PW")
+        password = environ.get("DB_PASS")
         database = environ.get("DB_NAME")
         env_path = environ.get("COMPOSE_ENV")
         compose_cfg = environ.get("COMPOSE_CFG")
