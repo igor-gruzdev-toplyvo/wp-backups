@@ -1,11 +1,14 @@
 from os import path, environ, system
 from datetime import datetime
-
+from dotenv import load_dotenv
 
 class Backup:
-    """Addon for making archived backups 
+    """Addon for making archived backups
     of wordpress state folders and databases
     """
+
+    load_dotenv()
+
     def __init__(self):
         self.backups_path = environ.get("WP_BACKUPS")
         self.current_date = datetime.today().strftime("%Y-%m-%d")
@@ -19,14 +22,14 @@ class Backup:
 
         self.dump_path = f"{wp_prefix}/{self.current_date}-bc.sql"
 
-        src_parths = {
+        src_paths = {
             f"{wp_prefix}/plugins": "plugins",
             f"{wp_prefix}/uploads": "uploads",
             f"{self.dump_path}": "database",
         }
 
-        for element in src_parths:
-            self.source_paths.update(element)
+        for element in src_paths:
+            self.source_paths.update({element: src_paths[element]})
 
     def __array_generator(self):
         """Method generates dict of folders and
@@ -36,14 +39,13 @@ class Backup:
         while cycle < 6:
             key = f"{self.backups_path}/{cycle}"
             value = float(path.getmtime(key))
-            element = {key: value}
-            self.mod_date_array.update(element)
+            self.mod_date_array.update({key: value})
             cycle += 1
         else:
             print("Array successfully generated")
 
     def __dump_mysql(self):
-        """Method creates mysql database 
+        """Method creates mysql database
         dump for further operations
         """
         user = environ.get("DB_USER")
@@ -60,7 +62,7 @@ class Backup:
         )
 
     def make_backup(self):
-        """Method does backup and archive 
+        """Method does backup and archive
         of current wordpress state
         """
         self.__src_generator()
