@@ -3,9 +3,11 @@ from datetime import datetime
 
 
 class Backup:
+    """Addon for making archived backups 
+    of wordpress state folders and databases
+    """
     def __init__(self):
-        self.env = environ.Env()
-        self.backups_path = self.env("WP_BACKUPS")
+        self.backups_path = environ.get("WP_BACKUPS")
         self.current_date = datetime.today().strftime("%Y-%m-%d")
         self.dump_path = None
         self.mod_date_array = {}
@@ -13,7 +15,7 @@ class Backup:
 
     def __src_generator(self):
         """Method generates src path's for furher operations"""
-        wp_prefix = self.env("WP_PREFIX")
+        wp_prefix = environ.get("WP_PREFIX")
 
         self.dump_path = f"{wp_prefix}/{self.current_date}-bc.sql"
 
@@ -44,11 +46,11 @@ class Backup:
         """Method creates mysql database 
         dump for further operations
         """
-        user = self.env("DB_USER")
-        password = self.env("DB_PW")
-        database = self.env("DB_NAME")
-        env_path = self.env("COMPOSE_ENV")
-        compose_cfg = self.env("COMPOSE_CFG")
+        user = environ.get("DB_USER")
+        password = environ.get("DB_PW")
+        database = environ.get("DB_NAME")
+        env_path = environ.get("COMPOSE_ENV")
+        compose_cfg = environ.get("COMPOSE_CFG")
 
         return system(
             f"""env $(cat {env_path}) \
