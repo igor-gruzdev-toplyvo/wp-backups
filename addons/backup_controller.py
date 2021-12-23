@@ -2,6 +2,7 @@ from os import path, environ, system
 from datetime import datetime
 from dotenv import load_dotenv
 
+
 class Backup:
     """Addon for making archived backups
     of wordpress state folders and databases
@@ -56,8 +57,8 @@ class Backup:
 
         return system(
             f"""env $(cat {env_path}) \
-            docker-compose -f {compose_cfg} exec -T mysql \
-            mysqldump -u{user} -p{password} {database} > {self.dump_path}
+            docker-compose -f {compose_cfg} exec -T db \
+            mysqldump --no-tablespaces -u{user} -p{password} {database} > {self.dump_path}
             """
         )
 
@@ -78,6 +79,5 @@ class Backup:
 
         for element in self.source_paths:
             system(
-                f"tar -xvzf {last_modified_element}/\
-                    {self.source_paths[element]}-{self.current_date}.tar.gz {element}"
+                f"tar -czf {last_modified_element}/{self.source_paths[element]}-{self.current_date}.tar.gz {element}"
             )
