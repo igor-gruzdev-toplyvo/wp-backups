@@ -26,7 +26,7 @@ class Backup:
         src_paths = {
             f"{self.wp_prefix}/plugins": "plugins",
             f"{self.wp_prefix}/uploads": "uploads",
-            f"{self.dump_path}": "database", 
+            f"{self.dump_path}": "database",
         }
 
         for element in src_paths:
@@ -72,7 +72,7 @@ class Backup:
 
         last_modified_element = min(self.mod_date_array, key=self.mod_date_array.get)
 
-        # Removing destination contents before backup        
+        # Removing destination contents before backup
         try:
             system(f"rm -rf {last_modified_element}/*")
         except Exception:
