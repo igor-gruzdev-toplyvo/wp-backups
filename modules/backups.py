@@ -55,11 +55,6 @@ class Backup:
         env_path = environ.get("COMPOSE_ENV")
         compose_cfg = environ.get("COMPOSE_CFG")
 
-        try:
-            system(f"rm {self.wp_prefix}/*sql")
-        except Exception:
-            pass
-
         return system(
             f"""env $(cat {env_path}) \
             docker-compose -f {compose_cfg} exec -T db \
@@ -77,6 +72,7 @@ class Backup:
 
         last_modified_element = min(self.mod_date_array, key=self.mod_date_array.get)
 
+        # Removing destination contents before backup        
         try:
             system(f"rm -rf {last_modified_element}/*")
         except Exception:
@@ -86,3 +82,9 @@ class Backup:
             system(
                 f"tar -czf {last_modified_element}/{self.source_paths[element]}-{self.current_date}.tar.gz {element}"
             )
+
+        # Removing MySQL dumps after backup is done
+        try:
+            system(f"rm {self.wp_prefix}/*sql")
+        except Exception:
+            pass
