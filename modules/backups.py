@@ -4,7 +4,7 @@ from dotenv import load_dotenv
 
 
 class Backup:
-    """Addon for making archived backups
+    """Module for making archived backups
     of wordpress state folders and databases
     """
 
