@@ -12,6 +12,7 @@ class Backup:
 
     def __init__(self):
         self.backups_path = environ.get("WP_BACKUPS")
+        self.wp_prefix = environ.get("WP_PREFIX")
         self.current_date = datetime.today().strftime("%Y-%m-%d")
         self.dump_path = None
         self.mod_date_array = {}
@@ -19,14 +20,13 @@ class Backup:
 
     def __src_generator(self):
         """Method generates src path's for furher operations"""
-        wp_prefix = environ.get("WP_PREFIX")
 
-        self.dump_path = f"{wp_prefix}/{self.current_date}-bc.sql"
+        self.dump_path = f"{self.wp_prefix}/{self.current_date}-bc.sql"
 
         src_paths = {
-            f"{wp_prefix}/plugins": "plugins",
-            f"{wp_prefix}/uploads": "uploads",
-            f"{self.dump_path}": "database",
+            f"{self.wp_prefix}/plugins": "plugins",
+            f"{self.wp_prefix}/uploads": "uploads",
+            f"{self.dump_path}": "database", 
         }
 
         for element in src_paths:
@@ -54,6 +54,11 @@ class Backup:
         database = environ.get("DB_NAME")
         env_path = environ.get("COMPOSE_ENV")
         compose_cfg = environ.get("COMPOSE_CFG")
+
+        try:
+            system(f"rm {self.wp_prefix}/*sql")
+        except Exception:
+            pass
 
         return system(
             f"""env $(cat {env_path}) \
